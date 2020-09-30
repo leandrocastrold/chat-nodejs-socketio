@@ -20,4 +20,9 @@ app.use('/', (req, res) => {
     res.render('index.html');
 })
 
+//Toda vez que um cliente se conectar ao socket, o que ele vai fazer
+io.on('connection', socket => {
+    console.log(`Socket conectado. id: ${socket.id}`);
+}).
+
 server.listen(3000);
