@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <form id="chat">
         <input type="text" name="username" placeholder="Digite seu usuário">
@@ -18,8 +20,38 @@
     </form>
 
     <script type="text/javascript">
-    //Conetando com o socket do back-end
-    var socket = io('http://localhost:3000');
+        //Conectando com o socket do back-end
+        let socket = io('http://localhost:3000');
+
+        //Usando um pouco de Jquery
+        function renderMessage(message) {
+        $('.messages').append('<div class="message"><strong>'+ message.nAuthor+'</strong> : '+ message.nMessage +'</div>')
+        }
+
+        socket.on('receivedMessage', function(message) {
+            renderMessage(message);
+        })
+
+        $('#chat').submit(function (event) {
+            event.preventDefault();
+
+            let author = $('input[name=username]').val();
+            let message = $('input[name=message]').val();
+            
+            let isAuthorAndMessageLengthValid = author.length
+                && message.length;
+            
+                if (isAuthorAndMessageLengthValid) {
+                    let messageObject = {
+                        nAuthor: author,
+                        nMessage: message, 
+                    };
+                    renderMessage(messageObject)
+                    socket.emit('sendMessage', messageObject);
+                }
+
+    })
     </script>
 </body>
+
 </html>
