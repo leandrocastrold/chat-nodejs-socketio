@@ -21,13 +21,18 @@ app.use('/', (req, res) => {
 })
 
 let messages = []
+
+
+
 //Toda vez que um cliente se conectar ao socket, o que ele vai fazer
 io.on('connection', socket => {
+
     console.log(`Socket conectado. ID: ${socket.id}`);
+    socket.emit('previousMessages', messages)
     socket.on('sendMessage', data => {
         console.log(data);
         messages.push(data);
-        socket.broadcast.emit('receivedMessage', data)
+        socket.broadcast.emit('receivedMessage', data);
    })
 
 }).

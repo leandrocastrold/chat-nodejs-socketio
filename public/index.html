@@ -27,6 +27,12 @@
         function renderMessage(message) {
         $('.messages').append('<div class="message"><strong>'+ message.nAuthor+'</strong> : '+ message.nMessage +'</div>')
         }
+        
+        socket.on('previousMessages', function(messages) {
+            messages.forEach(message => {
+                renderMessage(message)
+            });
+        })
 
         socket.on('receivedMessage', function(message) {
             renderMessage(message);
